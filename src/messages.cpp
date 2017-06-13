@@ -94,7 +94,7 @@ VK::vector_dialogs VK::Messages::get_dialogs(const size_t count, const size_t of
 
 
 VK::vector_dialogs VK::Messages::get_all_dialogs(const size_t max_count){
-    const size_t count = (max_count > 200) ? 200 : max_count;
+    const size_t count = (max_count > 200 || max_count < 1) ? 200 : max_count;
     VK::vector_dialogs all_res, tmp_res;
     size_t offset = 0;
     for(;;){
