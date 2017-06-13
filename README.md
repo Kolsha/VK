@@ -6,15 +6,26 @@ VK API Lib - небольшая библиотека для работы API, н
 
 Базовый пример использования:
 <code>
+
 #include "src/api.h"
+
 ...
+
 VK::Client api;
+
 if(api.auth(login, pass, access_token)){
+
   cout << "Auth ok" << endl;
+  
   cout << "Access token: " << api.access_token() << endl << endl;
+  
   cout << api.call("wall.post", "owner_id=12345&message=Test");
+  
 }
+
 else{
+
   cout << "Auth fail" << endl;
+  
 }
 </code>
