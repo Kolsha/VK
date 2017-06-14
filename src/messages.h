@@ -24,6 +24,7 @@ public:
         return "[" + title + " | " + std::to_string(chat_id) + "] " + body;
     }
 
+    virtual ~DialogInfo(){}
 };
 
 
@@ -42,6 +43,7 @@ public:
     std::string get_username(const int user_id);
 
     template<typename T> std::vector<T> get_attachments(const int chat_id, const size_t count = 0);
+
     virtual ~Messages(){}
 };
 

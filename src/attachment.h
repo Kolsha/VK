@@ -33,6 +33,7 @@ public:
         return std::to_string(user_id) + " - " + first_name + " " + last_name;
     }
 
+    virtual ~User(){}
 };
 
 
@@ -47,6 +48,8 @@ public:
     int owner_id;
     size_t date;
     std::string direct_url;
+
+    virtual ~BaseAttachment(){}
 };
 
 class Audio : public BaseAttachment
@@ -61,6 +64,7 @@ public:
         return artist + " - " + title + " : " + std::to_string(duration);
     }
 
+    virtual ~Audio(){}
 };
 
 class Photo : public BaseAttachment
@@ -73,6 +77,7 @@ public:
         return text + " - " + direct_url + " : " + std::to_string(date);
     }
 
+    virtual ~Photo(){}
 };
 
 class Document : public BaseAttachment
@@ -81,17 +86,7 @@ public:
     static const std::string type;
     std::string title;
     std::string ext;
-    int doc_type = -1; /*
-        Тип документа. Возможные значения:
-        1 — текстовые документы;
-        2 — архивы;
-        3 — gif;
-        4 — изображения;
-        5 — аудио;
-        6 — видео;
-        7 — электронные книги;
-        8 — неизвестно.
-    */
+    int doc_type = -1;
     static std::string doc_type_str(const int tp);
     size_t size = 0; /* in byte */
 
@@ -100,6 +95,7 @@ public:
         return title + " - " + ext + " : " + std::to_string(size);
     }
 
+    virtual ~Document(){}
 };
 
 }
