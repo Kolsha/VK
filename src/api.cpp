@@ -190,6 +190,7 @@ json VK::Client::call(const string &method, const std::string &params){
 
     try{
         json jres = json::parse(res);
+
         if(jres.find("error") == jres.end()){
             return jres;
         }

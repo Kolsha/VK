@@ -15,6 +15,7 @@ using callback_func = std::string(*)(const std::string &);
 
 using json = nlohmann::json;
 
+/* http params */
 using params_map = std::unordered_map<std::string, std::string>;
 
 class Client
@@ -43,20 +44,16 @@ private:
     }
 
     std::string curl_buffer;
-
+    static const std::string api_url;
 protected:
     std::string lang;
     std::string version;
-
     Attachment::User user;
-//    size_t _user_id;
-//    std::string _first_name;
-//    std::string _last_name;
     bool check_access();
     std::string request(const std::string &url, const std::string &data);
 public:
 
-    static const std::string api_url;
+
 
     Client(const std::string version = "5.65", const std::string lang = "en",
            const callback_func callback = nullptr);
@@ -69,8 +66,6 @@ public:
               const std::string &access_token = "");
 
     bool oauth(const callback_func handler);
-
-
 
     json call(const std::string &method, const params_map &params);
 
@@ -97,6 +92,9 @@ public:
 
 };
 
+
+/* Network utils
+ */
 class Utils{
 public:
     static std::string data2str(const params_map &data);
@@ -106,7 +104,7 @@ public:
 };
 
 
-}
+} // namespace VK
 
 
 

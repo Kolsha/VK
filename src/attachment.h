@@ -7,20 +7,37 @@ namespace VK {
 
 using json = nlohmann::json;
 
+
+/* List of VK Attacment, e.g.: Audio, Photo, Document
+ */
+
 namespace Attachment {
 
+/* class for store data
+ */
 class DataModel{
 protected:
     bool parsed;
 public:
+    /* parse json and fill self fileds
+     * if all is ok returned true
+     */
     virtual bool parse(const json &data) = 0;
+
+    /* return class fields in std::string
+     */
     virtual std::string dump() = 0;
+
     bool is_parsed(){
         return parsed;
     }
+
     virtual ~DataModel(){}
 };
 
+
+/* VK User Info
+ */
 class User : public DataModel
 {
 public:
@@ -37,6 +54,8 @@ public:
 };
 
 
+/* class for store common data of VK Attacment
+ */
 class BaseAttachment : public DataModel
 {
 protected:
@@ -46,19 +65,24 @@ protected:
 public:
     int id;
     int owner_id;
-    size_t date;
-    std::string direct_url;
+
+    size_t date; /* timestamp date attachment */
+
+    std::string direct_url; /* url to download attachment */
 
     virtual ~BaseAttachment(){}
 };
 
+
+/* VK Audio Attachment
+ */
 class Audio : public BaseAttachment
 {
 public:
-    static const std::string type;
+    static const std::string type; /* need to make request to API */
     std::string artist;
     std::string title;
-    size_t duration;
+    size_t duration; /* in seconds */
     bool parse(const json &data);
     std::string dump(){
         return artist + " - " + title + " : " + std::to_string(duration);
@@ -67,10 +91,13 @@ public:
     virtual ~Audio(){}
 };
 
+
+/* VK Photo Attachment
+ */
 class Photo : public BaseAttachment
 {
 public:
-    static const std::string type;
+    static const std::string type; /* need to make request to API */
     std::string text;
     bool parse(const json &data);
     std::string dump(){
@@ -80,12 +107,15 @@ public:
     virtual ~Photo(){}
 };
 
+
+/* VK Document Attachment
+ */
 class Document : public BaseAttachment
 {
 public:
-    static const std::string type;
+    static const std::string type; /* need to make request to API */
     std::string title;
-    std::string ext;
+    std::string ext; /* for e.g. mp3, gif, jpg */
     int doc_type = -1;
     static std::string doc_type_str(const int tp);
     size_t size = 0; /* in byte */
@@ -98,7 +128,8 @@ public:
     virtual ~Document(){}
 };
 
-}
+} // namespace Attachment
 
-}
+} // namespace VK
+
 #endif // VK_ATTACHMENT_H
