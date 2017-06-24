@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
     if(api.auth(login, pass, access_token)){
         cout << "Auth ok" << endl;
         cout << "Access token: " << api.access_token() << endl << endl;
+        api.call("wall.get", "owner_id=-123123123&text=Hello from API");
     }
     else{
         cout << "Auth fail" << endl;
