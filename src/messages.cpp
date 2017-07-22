@@ -82,12 +82,6 @@ VK::vector_dialogs VK::Messages::get_dialogs(const size_t count, const size_t of
     }
 
     return std::move(res);
-
-    /*for (json::iterator it = jres.begin(); it != jres.end(); ++it) {
-      std::cout << it.key() << " : " << it.value() << "\n";
-    }
-    */
-
 }
 
 

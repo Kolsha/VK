@@ -2,8 +2,6 @@
 #include "api.h"
 
 using ::std::string;
-using ::std::cout;
-using ::std::endl;
 using json = ::nlohmann::json;
 
 
@@ -124,7 +122,6 @@ bool VK::Client::auth(const string &login, const string &pass,
     captcha_key.clear();
 
     try{
-        cout << res << endl;
         json jres = json::parse(res);
         if(jres.find("error") == jres.end() ||
                 jres.find("access_token") != jres.end()){
@@ -158,7 +155,6 @@ bool VK::Client::auth(const string &login, const string &pass,
         return false;
     }
     catch(...){
-        cout << "Catch in auth" << endl;
         return false;
     }
 
