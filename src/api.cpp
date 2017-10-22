@@ -4,16 +4,12 @@
 using ::std::string;
 using json = ::nlohmann::json;
 
-
-
 const string VK::Client::api_url = "https://api.vk.com/method/";
 const string VK::Client::app_id = "3140623";// android=2274003
 const string VK::Client::app_secret = "VeWdmVclDCtn6ihuP1nt";// android=hHbZxrka2uZ6jB1inYsH
 const string VK::Client::scope = "offline,groups,messages,friends,audio";
 
 const string VK::Client::auth_url = "https://oauth.vk.com/token?";
-
-
 
 bool VK::Client::oauth(const callback_func handler){
     if(handler == nullptr){
@@ -53,7 +49,6 @@ bool VK::Client::oauth(const callback_func handler){
 
 }
 
-
 VK::Client::Client(const string version, const string lang,
                    const callback_func callback){
 
@@ -61,7 +56,6 @@ VK::Client::Client(const string version, const string lang,
     this->lang = lang;
     this->version = version;
 }
-
 
 bool VK::Client::check_access(){
     json jres = call("users.get", "");
@@ -128,7 +122,6 @@ bool VK::Client::auth(const string &login, const string &pass,
 
             this->a_t = jres.at("access_token").get<string>();
             this->user.user_id = jres.at("user_id").get<size_t>();
-
 
             return check_access();
         }
@@ -228,14 +221,6 @@ json VK::Client::call(const string &method, const params_map &params){
     return this->call(method, data);
 }
 
-
-
-
-
-
-
-
-
 string VK::Utils::char2hex(const char dec){
     char dig1 = (dec & 0xF0) >> 4;
     char dig2 = (dec & 0x0F);
@@ -323,6 +308,3 @@ string VK::Client::request(const string &url, const string &data){
 
     return "";
 }
-
-
-
