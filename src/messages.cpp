@@ -3,11 +3,6 @@
 
 using std::string;
 
-VK::Messages::Messages()
-{
-
-}
-
 bool VK::DialogInfo::parse(const json &data){
     if(data == nullptr){
         return false;
@@ -38,7 +33,6 @@ bool VK::DialogInfo::parse(const json &data){
 
     return false;
 }
-
 
 VK::vector_dialogs VK::Messages::get_dialogs(const size_t count, const size_t offset){
     VK::vector_dialogs res;
@@ -83,9 +77,6 @@ VK::vector_dialogs VK::Messages::get_dialogs(const size_t count, const size_t of
 
     return std::move(res);
 }
-
-
-
 
 VK::vector_dialogs VK::Messages::get_all_dialogs(const size_t max_count){
     const size_t count = (max_count > 200 || max_count < 1) ? 200 : max_count;
@@ -145,7 +136,6 @@ std::string VK::Messages::get_username(const int user_id)
     user.parse(info);
     return user.first_name + " " + user.last_name;
 }
-
 
 template<typename T>
 std::vector<T> VK::Messages::get_attachments(const int chat_id, const size_t count) {

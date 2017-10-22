@@ -19,8 +19,7 @@ public:
 
     bool parse(const json &data);
 
-
-    std::string dump(){
+    inline std::string dump(){
         return "[" + title + " | " + std::to_string(chat_id) + "] " + body;
     }
 
@@ -34,8 +33,6 @@ class Messages : public Client
 {
 
 public:
-    Messages();
-
     /* return vector_dialogs by count and offset.
      * Max count = 200.
      */

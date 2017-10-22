@@ -7,7 +7,6 @@ namespace VK {
 
 using json = nlohmann::json;
 
-
 /* List of VK Attacment, e.g.: Audio, Photo, Document
  */
 
@@ -28,7 +27,7 @@ public:
      */
     virtual std::string dump() = 0;
 
-    bool is_parsed(){
+    inline bool is_parsed(){
         return parsed;
     }
 

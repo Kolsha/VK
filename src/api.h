@@ -26,15 +26,12 @@ private:
     static const std::string app_id;
     static const std::string app_secret;
     static const std::string scope;
-
     static const std::string auth_url;
 
     std::string a_t;
-
     std::string captcha_sid;
     std::string captcha_key;
     callback_func captcha_callback;
-
 
     std::string get_captcha_key(const std::string captcha_sid){
         if(captcha_callback != nullptr){

@@ -4,16 +4,11 @@
 using ::std::string;
 using json = ::nlohmann::json;
 
-
-
 const string VK::Client::api_url = "https://api.vk.com/method/";
 const string VK::Client::app_id = "3140623";// android=2274003
 const string VK::Client::app_secret = "VeWdmVclDCtn6ihuP1nt";// android=hHbZxrka2uZ6jB1inYsH
 const string VK::Client::scope = "offline,groups,messages,friends,audio";
-
 const string VK::Client::auth_url = "https://oauth.vk.com/token?";
-
-
 
 bool VK::Client::oauth(const callback_func handler){
     if(handler == nullptr){
@@ -84,14 +79,12 @@ bool VK::Client::check_access(){
 
 bool VK::Client::auth(const string &login, const string &pass,
                       const string &access_token){
-
     if(!access_token.empty()){
         this->a_t = access_token;
         if(check_access()){
             return true;
         }
     }
-
     this->a_t.clear();
 
     if(login.empty() || pass.empty()){
@@ -111,9 +104,7 @@ bool VK::Client::auth(const string &login, const string &pass,
     };
 
     string data = VK::Utils::data2str(params);
-
     string res = request(url, data);
-
     if(res.empty()){
         return false;
     }
@@ -169,7 +160,6 @@ json VK::Client::call(const string &method, const std::string &params){
     string data = params + ( (params.empty()) ? "" : "&");
 
     params_map tmp_params;
-
     tmp_params.insert({"captcha_sid", captcha_sid});
     tmp_params.insert({"captcha_key", captcha_key});
     tmp_params.insert({"v", version});
@@ -180,6 +170,9 @@ json VK::Client::call(const string &method, const std::string &params){
 
     data += VK::Utils::data2str(tmp_params);
     string res = request(url, data);
+	if(res.empty()){
+        return nullptr;
+    }
 
     captcha_sid.clear();
     captcha_key.clear();
@@ -272,7 +265,6 @@ string VK::Utils::urlencode(const string &url){
 
 string VK::Utils::data2str(const params_map &data){
     string result;
-
     for(auto &kv:data){
         result += kv.first + "=" + urlencode(kv.second)+ "&";
     }

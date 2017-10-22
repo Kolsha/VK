@@ -61,7 +61,6 @@ bool VK::Attachment::Audio::parse(const json &data){
 }
 
 bool VK::Attachment::Photo::parse(const json &data){
-
     std::vector<string> sizes = { "photo_2560", "photo_1280", "photo_807", "photo_604", "photo_130", "photo_75"};
     if(data == nullptr){
         return false;
@@ -95,9 +94,7 @@ bool VK::Attachment::Photo::parse(const json &data){
     return false;
 }
 
-
-std::string VK::Attachment::Document::doc_type_str(const int tp)
-{
+std::string VK::Attachment::Document::doc_type_str(const int tp){
     switch (tp) {
     case 1:
         return "text";
@@ -148,8 +145,7 @@ bool VK::Attachment::Document::parse(const json &data){
     return false;
 }
 
-bool VK::Attachment::User::parse(const VK::json &data)
-{
+bool VK::Attachment::User::parse(const VK::json &data){
     if(data == nullptr){
         return false;
     }
