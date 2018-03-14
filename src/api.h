@@ -11,7 +11,8 @@
 
 namespace VK{
 
-using callback_func = std::string(*)(const std::string &);
+using callback_func_cap = std::string(*)(const std::string &);
+using callback_func_fa2 = std::string(*)();
 
 using json = nlohmann::json;
 
@@ -27,66 +28,59 @@ private:
     static const std::string app_secret;
     static const std::string scope;
     static const std::string auth_url;
+    static const std::string api_url;
 
     std::string a_t;
     std::string captcha_sid;
     std::string captcha_key;
-    callback_func captcha_callback;
+    std::string fa2_code;
 
-    std::string get_captcha_key(const std::string captcha_sid){
-        if(captcha_callback != nullptr){
-            return captcha_callback(captcha_sid);
-        }
-        return "";
-    }
+    std::string l_error;
+
+    callback_func_cap captcha_callback = nullptr;
+    callback_func_fa2 fa2_callback = nullptr;
+
+    inline std::string get_captcha_key(const std::string &captcha_sid);
+    inline std::string get_fa2_code();
 
     std::string curl_buffer;
-    static const std::string api_url;
+
 protected:
-    std::string lang;
     std::string version;
+    std::string lang;
     Attachment::User user;
     bool check_access();
     std::string request(const std::string &url, const std::string &data);
+
 public:
 
-
-
-    Client(const std::string version = "5.65", const std::string lang = "en",
-           const callback_func callback = nullptr);
-
-    std::string access_token(){
-        return a_t;
-    }
+    Client(const std::string _version = "5.65",
+           const std::string _lang = "en",
+           const callback_func_cap cap_callback = nullptr,
+           const callback_func_fa2 _fa2_callback = nullptr);
 
     bool auth(const std::string &login, const std::string &pass,
               const std::string &access_token = "");
 
-    bool oauth(const callback_func handler);
+    bool oauth(const callback_func_cap handler);
 
     json call(const std::string &method, const params_map &params);
 
     json call(const std::string &method, const std::string &params = "");
 
-    void clear(){
-        a_t.clear();
-        user.first_name.clear();
-        user.last_name.clear();
-        user.user_id = 0;
-    }
+    void clear();
 
-    std::string first_name(){
-        return user.first_name;
-    }
-    std::string last_name(){
-        return user.last_name;
-    }
-    size_t user_id(){
-        return user.user_id;
-    }
+    std::string first_name() const;
+    std::string last_name() const;
+    size_t user_id() const;
+
+    std::string access_token() const;
+    std::string last_error() const;
+
+    void set_fa2_callback(const callback_func_fa2 _fa2_callback = nullptr);
+    void set_cap_callback(const callback_func_cap cap_callback = nullptr);
 
     virtual ~Client(){}
-
 };
 
 

@@ -10,7 +10,7 @@ const string VK::Client::app_secret = "VeWdmVclDCtn6ihuP1nt";// android=hHbZxrka
 const string VK::Client::scope = "offline,groups,messages,friends,audio";
 const string VK::Client::auth_url = "https://oauth.vk.com/token?";
 
-bool VK::Client::oauth(const callback_func handler){
+bool VK::Client::oauth(const callback_func_cap handler){
     if(handler == nullptr){
         return false;
     }
@@ -49,14 +49,36 @@ bool VK::Client::oauth(const callback_func handler){
 }
 
 
-VK::Client::Client(const string version, const string lang,
-                   const callback_func callback){
+VK::Client::Client(const std::string _version,
+                   const std::string _lang,
+                   const VK::callback_func_cap cap_callback,
+                   const VK::callback_func_fa2 _fa2_callback) :
+    version(_version), lang(_lang),
+    captcha_callback(cap_callback),
+    fa2_callback(_fa2_callback)
+{
 
-    this->captcha_callback = callback;
-    this->lang = lang;
-    this->version = version;
 }
 
+std::string VK::Client::access_token() const{
+    return a_t;
+}
+
+std::string VK::Client::last_error() const
+{
+    return l_error;
+}
+
+
+std::string VK::Client::get_captcha_key(const std::string &captcha_sid)
+{
+    return (captcha_callback != nullptr) ? captcha_callback(captcha_sid) : "";
+}
+
+std::string VK::Client::get_fa2_code()
+{
+    return (fa2_callback != nullptr) ? fa2_callback() : "";
+}
 
 bool VK::Client::check_access(){
     json jres = call("users.get", "");
@@ -100,8 +122,16 @@ bool VK::Client::auth(const string &login, const string &pass,
         {"username", login},
         {"password", pass},
         {"captcha_sid", captcha_sid},
-        {"captcha_key", captcha_key}
+        {"captcha_key", captcha_key},
     };
+
+    if(fa2_callback != nullptr){
+        params.insert({"2fa_supported", "1"});
+    }
+
+    if(!fa2_code.empty()){
+        params.insert({"code", fa2_code});
+    }
 
     string data = VK::Utils::data2str(params);
     string res = request(url, data);
@@ -120,18 +150,28 @@ bool VK::Client::auth(const string &login, const string &pass,
             this->a_t = jres.at("access_token").get<string>();
             this->user.user_id = jres.at("user_id").get<size_t>();
 
-
             return check_access();
         }
         else{
-            string error = jres.at("error").get<string>();
-            if(error == "invalid_client"){
+            this->l_error = jres.at("error").get<string>();
+
+            if(this->l_error == "invalid_client"){
                 return false;
             }
-            if(error == "invalid_request"){
+
+            if(this->l_error == "invalid_request"){
                 return false;
             }
-            if(error == "need_captcha"){
+
+            if(this->l_error == "need_validation"){
+                fa2_code = get_fa2_code();
+                if(!fa2_code.empty()){
+                    return this->auth(login, pass);
+                }
+                fa2_code.clear();
+            }
+
+            if(this->l_error == "need_captcha"){
                 captcha_sid = jres.at("captcha_sid").get<string>();
                 captcha_key = get_captcha_key(captcha_sid);
                 if(!captcha_key.empty()){
@@ -170,7 +210,7 @@ json VK::Client::call(const string &method, const std::string &params){
 
     data += VK::Utils::data2str(tmp_params);
     string res = request(url, data);
-	if(res.empty()){
+    if(res.empty()){
         return nullptr;
     }
 
@@ -205,6 +245,43 @@ json VK::Client::call(const string &method, const std::string &params){
     }
 
     return nullptr;
+}
+
+void VK::Client::clear()
+{
+    a_t.clear();
+    user.first_name.clear();
+    user.last_name.clear();
+    user.user_id = 0;
+
+    captcha_sid.clear();
+    captcha_key.clear();
+    fa2_code.clear();
+}
+
+std::string VK::Client::first_name() const
+{
+    return user.first_name;
+}
+
+std::string VK::Client::last_name() const
+{
+    return user.last_name;
+}
+
+size_t VK::Client::user_id() const
+{
+    return user.user_id;
+}
+
+void VK::Client::set_fa2_callback(const VK::callback_func_fa2 _fa2_callback)
+{
+    fa2_callback = _fa2_callback;
+}
+
+void VK::Client::set_cap_callback(const VK::callback_func_cap cap_callback)
+{
+    captcha_callback = cap_callback;
 }
 
 json VK::Client::call(const string &method, const params_map &params){
@@ -315,6 +392,7 @@ string VK::Client::request(const string &url, const string &data){
 
     return "";
 }
+
 
 
 
