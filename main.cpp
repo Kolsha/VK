@@ -13,16 +13,20 @@ string fa2_callback(){
 
 string captcha_callback(const string &captcha_sid){
     string res;
-    cout << "Open image https://api.vk.com/captcha.php?sid=" << captcha_sid;\
+    cout << "Open image https://api.vk.com/captcha.php?sid=" << captcha_sid;
     cout << " and enter text: " << endl;
     cin >> res;
     return res;
 }
 
+void print_man(){
+    cout << "Usage: [access_token] login pass" << endl;
+}
+
 int main(int argc, char *argv[])
 {
     if(argc < 2 || argc > 4){
-        cout << "[access_token] login pass" << endl;
+        print_man();
         return 1;
     }
 
@@ -40,6 +44,10 @@ int main(int argc, char *argv[])
         login = argv[2];
         pass = argv[3];
     }
+    else{
+        print_man();
+        return 1;
+    }
 
 
     VK::Client api;
@@ -48,7 +56,16 @@ int main(int argc, char *argv[])
     if(api.auth(login, pass, access_token)){
         cout << "Auth ok" << endl;
         cout << "Access token: " << api.access_token() << endl;
-        api.call("wall.post", "owner_id=-123123123&message=Hello from API");
+        
+        VK::params_map params = {
+            {"owner_id", "134575353"},
+            {"message", "Hello from VK API"}
+        };
+        cout << "API response: " << endl;
+        cout << api.call("wall.post", params) << endl;
+        /* alternative method
+        api.call("wall.post", "owner_id=134575353&message=Hello from VK API");
+        */
     }
     else{
         cout << "Auth fail: " << api.last_error() << endl;
