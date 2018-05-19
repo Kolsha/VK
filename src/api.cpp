@@ -53,9 +53,9 @@ VK::Client::Client(const std::string _version,
                    const std::string _lang,
                    const VK::callback_func_cap cap_callback,
                    const VK::callback_func_fa2 _fa2_callback) :
-    version(_version), lang(_lang),
     captcha_callback(cap_callback),
-    fa2_callback(_fa2_callback)
+    fa2_callback(_fa2_callback),
+    version(_version), lang(_lang)
 {
 
 }
