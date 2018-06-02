@@ -9,8 +9,7 @@ namespace VK {
 
 static const int chat_offset = 2000000000; /* VK Constant */
 
-class DialogInfo: public Attachment::DataModel
-{
+class DialogInfo: public Attachment::DataModel {
 public:
     bool is_chat = false;
     int chat_id;
@@ -19,18 +18,17 @@ public:
 
     bool parse(const json &data);
 
-    inline std::string dump(){
+    inline std::string dump() {
         return "[" + title + " | " + std::to_string(chat_id) + "] " + body;
     }
 
-    virtual ~DialogInfo(){}
+    virtual ~DialogInfo() {}
 };
 
 
 using vector_dialogs = std::vector< DialogInfo >;
 
-class Messages : public Client
-{
+class Messages : public Client {
 
 public:
     /* return vector_dialogs by count and offset.
@@ -51,7 +49,7 @@ public:
     /* if count == 0 return all attachments */
     template<typename T> std::vector<T> get_attachments(const int chat_id, const size_t count = 0);
 
-    virtual ~Messages(){}
+    virtual ~Messages() {}
 };
 
 } //namespace VK

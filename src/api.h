@@ -9,7 +9,7 @@
 
 #include "attachment.h"
 
-namespace VK{
+namespace VK {
 
 using callback_func_cap = std::string(*)(const std::string &);
 using callback_func_fa2 = std::string(*)();
@@ -19,8 +19,7 @@ using json = nlohmann::json;
 /* http params */
 using params_map = std::unordered_map<std::string, std::string>;
 
-class Client
-{
+class Client {
 
 private:
 
@@ -80,13 +79,13 @@ public:
     void set_fa2_callback(const callback_func_fa2 _fa2_callback = nullptr);
     void set_cap_callback(const callback_func_cap cap_callback = nullptr);
 
-    virtual ~Client(){}
+    virtual ~Client() {}
 };
 
 
 /* Network utils
  */
-class Utils{
+class Utils {
 public:
     static std::string data2str(const params_map &data);
     static std::string urlencode(const std::string &url);

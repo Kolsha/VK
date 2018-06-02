@@ -14,7 +14,7 @@ namespace Attachment {
 
 /* class for store data
  */
-class DataModel{
+class DataModel {
 protected:
     bool parsed;
 public:
@@ -27,36 +27,34 @@ public:
      */
     virtual std::string dump() = 0;
 
-    inline bool is_parsed(){
+    inline bool is_parsed() {
         return parsed;
     }
 
-    virtual ~DataModel(){}
+    virtual ~DataModel() {}
 };
 
 
 /* VK User Info
  */
-class User : public DataModel
-{
+class User : public DataModel {
 public:
 
     std::string first_name;
     std::string last_name;
     size_t user_id;
     bool parse(const json &data);
-    std::string dump(){
+    std::string dump() {
         return std::to_string(user_id) + " - " + first_name + " " + last_name;
     }
 
-    virtual ~User(){}
+    virtual ~User() {}
 };
 
 
 /* class for store common data of VK Attacment
  */
-class BaseAttachment : public DataModel
-{
+class BaseAttachment : public DataModel {
 protected:
     std::string parsed_type;
     bool parse_type(const json &data);
@@ -69,48 +67,45 @@ public:
 
     std::string direct_url; /* url to download attachment */
 
-    virtual ~BaseAttachment(){}
+    virtual ~BaseAttachment() {}
 };
 
 
 /* VK Audio Attachment
  */
-class Audio : public BaseAttachment
-{
+class Audio : public BaseAttachment {
 public:
     static const std::string type; /* need to make request to API */
     std::string artist;
     std::string title;
     size_t duration; /* in seconds */
     bool parse(const json &data);
-    std::string dump(){
+    std::string dump() {
         return artist + " - " + title + " : " + std::to_string(duration);
     }
 
-    virtual ~Audio(){}
+    virtual ~Audio() {}
 };
 
 
 /* VK Photo Attachment
  */
-class Photo : public BaseAttachment
-{
+class Photo : public BaseAttachment {
 public:
     static const std::string type; /* need to make request to API */
     std::string text;
     bool parse(const json &data);
-    std::string dump(){
+    std::string dump() {
         return text + " - " + direct_url + " : " + std::to_string(date);
     }
 
-    virtual ~Photo(){}
+    virtual ~Photo() {}
 };
 
 
 /* VK Document Attachment
  */
-class Document : public BaseAttachment
-{
+class Document : public BaseAttachment {
 public:
     static const std::string type; /* need to make request to API */
     std::string title;
@@ -120,11 +115,11 @@ public:
     size_t size = 0; /* in byte */
 
     bool parse(const json &data);
-    std::string dump(){
+    std::string dump() {
         return title + " - " + ext + " : " + std::to_string(size);
     }
 
-    virtual ~Document(){}
+    virtual ~Document() {}
 };
 
 } // namespace Attachment
